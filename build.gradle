@@ -18,6 +18,7 @@ buildscript {
     ext.test_runner_version = '1.5.2'
     ext.espresso_version = '3.5.1'
     ext.coroutine_test_version = '1.6.4'
+    ext.hilt_version = '2.45'
 
     repositories {
         google()
@@ -26,6 +27,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
 

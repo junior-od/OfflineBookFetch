@@ -7,15 +7,18 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.blinkslabs.blinkist.android.challenge.BlinkistChallengeApplication
 import com.blinkslabs.blinkist.android.challenge.R
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class BooksActivity : AppCompatActivity() {
 
+    //todo comment this
     @Inject lateinit var booksViewModelFactory: BooksViewModelFactory
 
+    //todo let BooksViewModel use @Hiltviewmodel
     private val viewModel by viewModels<BooksViewModel> { booksViewModelFactory }
 
     private lateinit var recyclerAdapter: BookListRecyclerAdapter
@@ -29,7 +32,7 @@ class BooksActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
-        (application as BlinkistChallengeApplication).component.inject(this)
+//        (application as BlinkistChallengeApplication).component.inject(this)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerAdapter = BookListRecyclerAdapter()

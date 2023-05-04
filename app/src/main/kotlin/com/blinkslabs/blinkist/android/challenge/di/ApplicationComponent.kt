@@ -7,6 +7,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
+@Deprecated("Will remain unused for this project")
 @Singleton
 @Component(modules = [BooksApiModule::class])
 interface ApplicationComponent {

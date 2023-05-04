@@ -4,8 +4,10 @@ import android.app.Application
 import com.blinkslabs.blinkist.android.challenge.di.ApplicationComponent
 import com.blinkslabs.blinkist.android.challenge.di.DaggerApplicationComponent
 import com.jakewharton.threetenabp.AndroidThreeTen
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class BlinkistChallengeApplication : Application() {
 
     val component: ApplicationComponent by lazy {
