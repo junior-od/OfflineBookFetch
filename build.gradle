@@ -19,6 +19,8 @@ buildscript {
     ext.espresso_version = '3.5.1'
     ext.coroutine_test_version = '1.6.4'
     ext.hilt_version = '2.45'
+    ext.compose_bom_version = '2022.10.00'
+    ext.accompanist_version = '0.28.0'
 
     repositories {
         google()
