@@ -51,6 +51,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
 
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -90,5 +91,11 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata"
     implementation "androidx.compose.ui:ui-tooling"
     implementation "com.google.accompanist:accompanist-themeadapter-material:$accompanist_version"
+
+    //glide compose
+    implementation "com.github.bumptech.glide:compose:$glide_version"
+
+    //truth test
+    testImplementation "com.google.truth:truth:$truth_version"
 
 }
