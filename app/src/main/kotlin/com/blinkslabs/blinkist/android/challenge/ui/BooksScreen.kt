@@ -1,5 +1,6 @@
 package com.blinkslabs.blinkist.android.challenge.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,13 +20,14 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.blinkslabs.blinkist.android.challenge.R
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
 import com.blinkslabs.blinkist.android.challenge.ui.common.LoadingBooksShimmer
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import org.threeten.bp.LocalDate
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -54,7 +56,7 @@ fun BooksScreen(
                 LoadingBooksShimmer()
             } else {
                 MyBooks(
-                    booksList = viewModelState.booksList
+                    groupedBooksList = viewModelState.groupedBooksList
                 )
             }
 
@@ -67,18 +69,26 @@ fun BooksScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyBooks(
-    booksList: List<Book>,
+    groupedBooksList: Map<String, List<Book>>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        items(booksList) {
-            SingleBook(
-                book = it
-            )
+        groupedBooksList.forEach { (header, booksList) ->
+
+            stickyHeader {
+                Text(header)
+            }
+
+            items(booksList) {
+                SingleBook(
+                    book = it
+                )
+            }
         }
     }
 }
@@ -94,7 +104,7 @@ fun SingleBook(
     ) {
         GlideImage(
             model = book.coverImageUrl,
-            contentDescription = "cover image",
+            contentDescription = stringResource(id = R.string.cover_image),
             modifier = Modifier.size(64.dp)
         )
 
@@ -114,22 +124,7 @@ fun BooksScreenPreview() {
     MaterialTheme {
         val bookState = BooksViewModel.GetBooksState(
             isLoading = false,
-            booksList = listOf(
-                Book(
-                    "d",
-                    "Book 1",
-                    "author 1",
-                    LocalDate.of(2018, 7, 3),
-                    ""
-                ),
-                Book(
-                    "d22",
-                    "Book 122",
-                    "author 122",
-                    LocalDate.of(2019, 7, 3),
-                    ""
-                )
-            )
+            groupedBooksList = emptyMap()
         )
         BooksScreen(
             viewModelState = bookState,

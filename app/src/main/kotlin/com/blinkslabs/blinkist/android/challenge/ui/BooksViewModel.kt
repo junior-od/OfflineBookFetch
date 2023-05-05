@@ -3,7 +3,7 @@ package com.blinkslabs.blinkist.android.challenge.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
-import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepoImpl
+import com.blinkslabs.blinkist.android.challenge.domain.usecase.GetBooksUseCase
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class BooksViewModel @Inject constructor(private val booksService: BooksRepoImpl) : ViewModel() {
+class BooksViewModel @Inject constructor(private val getBooksUseCase: GetBooksUseCase) : ViewModel() {
 
     private val subscriptions = CompositeDisposable()
 
@@ -38,7 +38,7 @@ class BooksViewModel @Inject constructor(private val booksService: BooksRepoImpl
                     it.copy(
                         isLoading = false,
                         isRefreshing = false,
-                        booksList = booksService.getBooks()
+                        groupedBooksList = getBooksUseCase.invoke()
                     )
                 }
             } catch (e: Exception) {
@@ -54,6 +54,6 @@ class BooksViewModel @Inject constructor(private val booksService: BooksRepoImpl
     data class GetBooksState(
         val isLoading: Boolean = false,
         val isRefreshing: Boolean = false,
-        val booksList: List<Book> = emptyList()
+        val groupedBooksList: Map<String, List<Book>> = emptyMap()
     )
 }
