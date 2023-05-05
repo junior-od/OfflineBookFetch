@@ -2,14 +2,14 @@ package com.blinkslabs.blinkist.android.challenge.di
 
 import android.content.Context
 import com.blinkslabs.blinkist.android.challenge.data.api.BooksApiModule
+import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepoModule
 import com.blinkslabs.blinkist.android.challenge.ui.BooksActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-@Deprecated("Will remain unused for this project")
 @Singleton
-@Component(modules = [BooksApiModule::class])
+@Component(modules = [BooksApiModule::class, BooksRepoModule::class])
 interface ApplicationComponent {
 
     @Component.Factory
