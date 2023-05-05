@@ -11,7 +11,7 @@ import timber.log.Timber
 class BlinkistChallengeApplication : Application() {
 
     val component: ApplicationComponent by lazy {
-        DaggerApplicationComponent.factory().create(applicationContext)
+        DaggerApplicationComponent.factory().create(this)
     }
 
     override fun onCreate() {
