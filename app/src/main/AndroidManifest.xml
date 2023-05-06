@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.BooksActivity"
             android:exported="true">
             <intent-filter>

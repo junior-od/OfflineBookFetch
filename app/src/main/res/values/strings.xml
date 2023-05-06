@@ -2,4 +2,9 @@
     <string name="app_name">Blinkist Code Challenge</string>
     <string name="error_generic">Uh-oh. An error has occurred. Please try again.</string>
     <string name="cover_image">Cover Image</string>
+    <string name="order_type">order</string>
+    <string name="filter">filter</string>
+    <string name="filter_by">Filter by</string>
+    <string name="week">Week</string>
+    <string name="alphabet">Alphabet</string>
 </resources>
