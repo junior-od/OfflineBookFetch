@@ -12,7 +12,7 @@ fun groupBooksByDatesInSameWeek(booklist: List<Book>): Map<String, List<Book>> {
     for (book in booklist) {
         val getDateWeekofYear = book.publishDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
 
-        val getDateWeekofYearWithActualYear = "$getDateWeekofYear ${book.publishDate.year}"
+        val getDateWeekofYearWithActualYear = "Week $getDateWeekofYear, ${book.publishDate.year}"
 
         if (groupedBooksByDates.containsKey(getDateWeekofYearWithActualYear)) {
             groupedBooksByDates[getDateWeekofYearWithActualYear]?.add(book)
