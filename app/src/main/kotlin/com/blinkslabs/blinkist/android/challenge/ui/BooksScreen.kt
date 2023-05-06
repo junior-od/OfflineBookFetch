@@ -184,7 +184,7 @@ fun FilterDialog(
                         }
                     }
                 ) {
-                    Text(text = "Week")
+                    Text(text = stringResource(id = R.string.week))
                 }
                 Tab(
                     selected = selectedTab == 1,
@@ -199,7 +199,7 @@ fun FilterDialog(
                         }
                     }
                 ) {
-                    Text(text = "Alphabet")
+                    Text(text = stringResource(id = R.string.alphabet))
                 }
             }
         }
