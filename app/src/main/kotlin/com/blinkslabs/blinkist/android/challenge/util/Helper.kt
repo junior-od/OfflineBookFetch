@@ -53,7 +53,7 @@ fun filterBooks(isAscending: Boolean, books: List<Book>, bookFilter: Constants.B
 }
 
 fun LocalDate.toDateString(): String {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val formatter = DateTimeFormatter.ofPattern(Constants.TimePatterns.yyyyMMdd)
     return this.format(formatter)
 }
 
@@ -62,9 +62,9 @@ fun LocalDate.isBeforeToday(): Boolean {
 }
 
 fun String.toLocaleDate(): LocalDate {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val regex = "\\d{4}-\\d{2}-\\d{2}" // This regex matches the yyyy-MM-dd pattern
-    val hasDatePattern = regex.toRegex().matches(this)
+    val formatter = DateTimeFormatter.ofPattern(Constants.TimePatterns.yyyyMMdd)
+
+    val hasDatePattern = Constants.RegexPatterns.isYyyyMmDdPattern.toRegex().matches(this)
 
     return if (hasDatePattern) {
         LocalDate.parse(this, formatter)
