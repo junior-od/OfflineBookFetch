@@ -9,5 +9,6 @@ data class BookEntity(
     val name: String,
     val author: String,
     val publishDate: String,
-    val coverImageUrl: String
+    val coverImageUrl: String,
+    val dateCreated: String
 )

@@ -1,5 +1,6 @@
 package com.blinkslabs.blinkist.android.challenge.util
 
+import com.blinkslabs.blinkist.android.challenge.data.local.BookEntity
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -56,19 +57,26 @@ fun LocalDate.toDateString(): String {
     return this.format(formatter)
 }
 
+fun LocalDate.isBeforeToday(): Boolean {
+    return this.toDateString() < LocalDate.now().toDateString()
+}
+
 fun String.toLocaleDate(): LocalDate {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val regex = "\\d{4}-\\d{2}-\\d{2}" // This regex matches the yyyy-MM-dd pattern
     val hasDatePattern = regex.toRegex().matches(this)
 
     return if (hasDatePattern) {
-
         LocalDate.parse(this, formatter)
-
     } else {
-        LocalDate.of(1900,10,10)
+        LocalDate.of(1900, 10, 10)
+    }
+}
+
+fun BookEntity?.shouldGetTodaysUpdate(): Boolean {
+    if (this == null) {
+        return true
     }
 
-
-
+    return this.dateCreated.toLocaleDate().isBeforeToday()
 }

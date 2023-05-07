@@ -45,12 +45,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import coil.compose.AsyncImage
 import com.blinkslabs.blinkist.android.challenge.R
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
 import com.blinkslabs.blinkist.android.challenge.ui.common.LoadingBooksShimmer
 import com.blinkslabs.blinkist.android.challenge.util.Constants
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -309,7 +308,6 @@ fun HeaderItem(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SingleBook(
     modifier: Modifier = Modifier,
@@ -321,7 +319,7 @@ fun SingleBook(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            GlideImage(
+            AsyncImage(
                 model = book.coverImageUrl,
                 contentDescription = stringResource(id = R.string.cover_image),
                 modifier = Modifier.size(64.dp)

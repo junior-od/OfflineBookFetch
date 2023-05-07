@@ -4,6 +4,7 @@ import com.blinkslabs.blinkist.android.challenge.data.local.BookEntity
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
 import com.blinkslabs.blinkist.android.challenge.util.toDateString
 import com.blinkslabs.blinkist.android.challenge.util.toLocaleDate
+import org.threeten.bp.LocalDate
 
 fun Book.toBookEntity(): BookEntity {
     return BookEntity(
@@ -11,7 +12,8 @@ fun Book.toBookEntity(): BookEntity {
         name = name,
         author = author,
         publishDate = publishDate.toDateString(),
-        coverImageUrl = coverImageUrl
+        coverImageUrl = coverImageUrl,
+        dateCreated = LocalDate.now().toDateString()
     )
 }
 
