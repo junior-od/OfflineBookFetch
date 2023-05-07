@@ -6,6 +6,7 @@ import com.blinkslabs.blinkist.android.challenge.data.local.BookDatabase
 import com.blinkslabs.blinkist.android.challenge.data.mappers.toBook
 import com.blinkslabs.blinkist.android.challenge.data.mappers.toBookEntity
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
+import com.blinkslabs.blinkist.android.challenge.util.shouldGetTodaysUpdate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -17,14 +18,19 @@ class BooksRepoImpl @Inject constructor(
 ) : BooksRepo {
 
     override suspend fun fetchBooks(checkUpdates: Boolean) {
-        Timber.tag("yeah").d("api call entered")
+        Timber.tag("yeah").d("fetch book called")
 
         booksDatabase.withTransaction {
-            val noCache = booksDatabase.dao.getAnyBook() == null
+            val anyBook = booksDatabase.dao.getAnyBook()
+            val noCache = anyBook == null
+
+            val shouldGetTodaysUpdate = anyBook.shouldGetTodaysUpdate()
 
             Timber.tag("yeah").d(noCache.toString())
 
-            if (checkUpdates || noCache) {
+            Timber.tag("yeah").d("should fetch today update : $shouldGetTodaysUpdate")
+
+            if (checkUpdates || noCache || shouldGetTodaysUpdate) {
                 Timber.tag("yeah").d("api call made")
                 // get from api
                 val bookList = booksApi.getAllBooks()
