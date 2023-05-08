@@ -3,6 +3,7 @@ package com.blinkslabs.blinkist.android.challenge.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blinkslabs.blinkist.android.challenge.data.model.Book
+import com.blinkslabs.blinkist.android.challenge.data.network.ConnectivityObserver
 import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepo
 import com.blinkslabs.blinkist.android.challenge.domain.usecase.GetBooksUseCase
 import com.blinkslabs.blinkist.android.challenge.util.Constants
@@ -13,13 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 class BooksViewModel @Inject constructor(
     private val getBooksUseCase: GetBooksUseCase,
-    private val booksRepo: BooksRepo
+    private val booksRepo: BooksRepo,
+    private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     private val subscriptions = CompositeDisposable()
@@ -32,6 +33,8 @@ class BooksViewModel @Inject constructor(
     val filterBook get() = _filterBooksState.asStateFlow()
 
     private var emitBooksJob: Job? = null
+
+    private var fetchBooksJob: Job? = null
 
     init {
         fetchBooks(false)
@@ -63,22 +66,39 @@ class BooksViewModel @Inject constructor(
     }
 
     fun fetchBooks(isRefreshing: Boolean = false) {
-        viewModelScope.launch {
-            try {
+        fetchBooksJob?.cancel()
+
+        fetchBooksJob = connectivityObserver.observe().onEach {
+                status ->
+            if (status == ConnectivityObserver.Status.Available) {
+                try {
+                    if (_booksState.value.groupedBooksList.isNotEmpty() && !isRefreshing) {
+                    } else {
+                        _booksState.update {
+                            it.copy(
+                                isLoading = !isRefreshing,
+                                isRefreshing = isRefreshing
+                            )
+                        }
+                    }
+
+                    booksRepo.fetchBooks(
+                        checkUpdates = isRefreshing
+                    )
+
+                    fetchBooksJob?.cancel()
+                } catch (e: Exception) {
+                    Timber.e(e, "while loading data")
+                }
+            } else {
                 _booksState.update {
                     it.copy(
-                        isLoading = !isRefreshing,
-                        isRefreshing = isRefreshing
+                        isLoading = false,
+                        isRefreshing = false
                     )
                 }
-
-                booksRepo.fetchBooks(
-                    checkUpdates = isRefreshing
-                )
-            } catch (e: Exception) {
-                Timber.e(e, "while loading data")
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     fun filterBooks(
