@@ -22,7 +22,7 @@ object ConnectionModule {
 
     @Provides
     @Singleton
-    fun provideConOb(connectivityManager: ConnectionManagerWrapper): ConnectivityObserver = ConnectivityObserverImpl(
+    fun provideConnectionObserver(connectivityManager: ConnectionManagerWrapper): ConnectivityObserver = ConnectivityObserverImpl(
         connectionManager = connectivityManager
     )
 }

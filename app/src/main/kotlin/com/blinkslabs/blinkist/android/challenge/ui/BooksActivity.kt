@@ -19,10 +19,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class BooksActivity : AppCompatActivity() {
 
-    // todo comment this
     @Inject lateinit var booksViewModelFactory: BooksViewModelFactory
 
-    // todo let BooksViewModel use @Hiltviewmodel
     private val viewModel by viewModels<BooksViewModel> { booksViewModelFactory }
 
     private lateinit var binding: ActivityBooksBinding
