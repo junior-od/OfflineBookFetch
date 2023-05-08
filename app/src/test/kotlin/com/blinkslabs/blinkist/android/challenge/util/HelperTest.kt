@@ -108,7 +108,7 @@ class HelperTest {
      * mapped books by title alphabet
      */
     @Test
-    fun `test groupBooksByDatesInSameWeek with book list should return the correct mapped books by alphabet`() {
+    fun `test groupBooksByTitle with book list should return the correct mapped books by alphabet`() {
         val booksList = listOf(
             Book(
                 "1",
