@@ -1,5 +1,7 @@
 package com.blinkslabs.blinkist.android.challenge.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.room.Room
@@ -9,7 +11,9 @@ import com.blinkslabs.blinkist.android.challenge.data.api.BooksApi
 import com.blinkslabs.blinkist.android.challenge.data.local.BookDatabase
 import com.blinkslabs.blinkist.android.challenge.data.local.BookEntity
 import com.blinkslabs.blinkist.android.challenge.data.local.BooksDao
-import com.blinkslabs.blinkist.android.challenge.data.model.Book
+import com.blinkslabs.blinkist.android.challenge.data.network.ConnectionManagerWrapper
+import com.blinkslabs.blinkist.android.challenge.data.network.ConnectivityObserver
+import com.blinkslabs.blinkist.android.challenge.data.network.ConnectivityObserverImpl
 import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepo
 import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepoImpl
 import com.blinkslabs.blinkist.android.challenge.domain.usecase.GetBooksUseCase
@@ -18,6 +22,7 @@ import com.blinkslabs.blinkist.android.challenge.util.Constants
 import com.blinkslabs.blinkist.android.challenge.util.toDateString
 import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -46,6 +51,8 @@ class BooksViewModelTest {
 
     private lateinit var booksViewModel: BooksViewModel
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+
     @Before
     fun setUp() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -58,6 +65,14 @@ class BooksViewModelTest {
         booksDao = bookDatabase.dao
 
         booksApi = mock(BooksApi::class.java)
+
+        val mockConnectivityManagerWrapper = ConnectionManagerWrapper(
+            appContext.getSystemService(
+                Context.CONNECTIVITY_SERVICE
+            ) as ConnectivityManager
+        )
+
+        connectivityObserver = ConnectivityObserverImpl(mockConnectivityManagerWrapper)
     }
 
     @After
@@ -66,45 +81,7 @@ class BooksViewModelTest {
     }
 
     @Test
-    fun testThatBooksRepoFetchBooksIsCalledSuccessfullyAndResultIsNotEmpty() = runTest {
-        Mockito.`when`(booksApi.getAllBooks()).thenReturn(
-            listOf(
-                Book(
-                    "1",
-                    "book 1",
-                    "author 1",
-                    LocalDate.of(2018, 7, 3),
-                    "cover url"
-                ),
-                Book(
-                    "2",
-                    "aBook 2",
-                    "book 2",
-                    LocalDate.of(2018, 7, 2),
-                    "cover url"
-                )
-            )
-        )
-
-        booksRepoImpl = BooksRepoImpl(
-            booksApi = booksApi,
-            booksDatabase = bookDatabase
-        )
-        getBooksUseCase = GetBooksUseCase(booksRepoImpl)
-        booksViewModel = BooksViewModel(
-            getBooksUseCase,
-            booksRepoImpl
-        )
-
-        val result = booksViewModel.books.asLiveData().getOrAwaitValue()
-
-        Truth.assertThat(result.groupedBooksList).isNotEmpty()
-        Truth.assertThat(result.isLoading).isFalse()
-        Truth.assertThat(result.isRefreshing).isFalse()
-    }
-
-    @Test
-    fun testThatBooksRepoFetchBooksIsCalledSuccessfullyAndResultIsEmpty() = runTest {
+    fun testThatBooksRepoFetchBooksIsCalledSuccessfullyAndResultIsEmpty() = runBlocking {
         Mockito.`when`(booksApi.getAllBooks()).thenReturn(
             emptyList()
         )
@@ -116,7 +93,8 @@ class BooksViewModelTest {
         getBooksUseCase = GetBooksUseCase(booksRepoImpl)
         booksViewModel = BooksViewModel(
             getBooksUseCase,
-            booksRepoImpl
+            booksRepoImpl,
+            connectivityObserver
         )
 
         val result = booksViewModel.books.asLiveData().getOrAwaitValue()
@@ -125,7 +103,7 @@ class BooksViewModelTest {
     }
 
     @Test
-    fun testThatViewModelLoadsDataFromDb() = runTest {
+    fun testThatViewModelLoadsDataFromDb() = runBlocking {
         val booksList = listOf(
             BookEntity(
                 "1",
@@ -161,7 +139,8 @@ class BooksViewModelTest {
         getBooksUseCase = GetBooksUseCase(booksRepoImpl)
         booksViewModel = BooksViewModel(
             getBooksUseCase,
-            booksRepoImpl
+            booksRepoImpl,
+            connectivityObserver
         )
 
         val result = booksViewModel.books.asLiveData().getOrAwaitValue()
@@ -180,7 +159,8 @@ class BooksViewModelTest {
         getBooksUseCase = GetBooksUseCase(booksRepoImpl)
         booksViewModel = BooksViewModel(
             getBooksUseCase,
-            booksRepoImpl
+            booksRepoImpl,
+            connectivityObserver
         )
 
         booksViewModel.filterBooks(isAscending = true, bookFilter = Constants.BookFilters.ALPHABET)

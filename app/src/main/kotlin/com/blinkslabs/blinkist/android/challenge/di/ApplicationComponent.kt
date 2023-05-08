@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.blinkslabs.blinkist.android.challenge.data.api.BooksApiModule
 import com.blinkslabs.blinkist.android.challenge.data.local.BookDatabaseModule
+import com.blinkslabs.blinkist.android.challenge.data.network.ConnectionModule
 import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepoModule
 import com.blinkslabs.blinkist.android.challenge.ui.BooksActivity
 import dagger.BindsInstance
@@ -15,7 +16,8 @@ import javax.inject.Singleton
     modules = [
         BooksApiModule::class,
         BooksRepoModule::class,
-        BookDatabaseModule::class
+        BookDatabaseModule::class,
+        ConnectionModule::class
     ]
 )
 interface ApplicationComponent {
