@@ -3,7 +3,6 @@ package com.blinkslabs.blinkist.android.challenge.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blinkslabs.blinkist.android.challenge.data.network.ConnectivityObserver
-import com.blinkslabs.blinkist.android.challenge.data.network.ConnectivityObserverImpl
 import com.blinkslabs.blinkist.android.challenge.data.repository.BooksRepo
 import com.blinkslabs.blinkist.android.challenge.domain.usecase.GetBooksUseCase
 import javax.inject.Inject

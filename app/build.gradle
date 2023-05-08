@@ -99,7 +99,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-themeadapter-material:$accompanist_version"
 
     //coil
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation "io.coil-kt:coil-compose:$coil_compose_version"
     //truth test
     testImplementation "com.google.truth:truth:$truth_version"
     androidTestImplementation "com.google.truth:truth:$truth_version"
