@@ -42,6 +42,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -145,10 +147,12 @@ fun FilterDialog(
     Dialog(
         onDismissRequest = onDismissDialog
     ) {
+        val filterDialogDesc = stringResource(id = R.string.filter_dialog)
         Column(
             modifier = modifier
                 .background(MaterialTheme.colors.background)
                 .padding(16.dp)
+                .semantics { contentDescription = filterDialogDesc }
         ) {
             Text(
                 text = stringResource(id = R.string.filter_by),
@@ -170,6 +174,7 @@ fun FilterDialog(
                 backgroundColor = MaterialTheme.colors.background,
                 contentColor = MaterialTheme.colors.onSurface
             ) {
+                val weekContentDesc = stringResource(id = R.string.week)
                 Tab(
                     selected = selectedTab == 0,
                     onClick = {
@@ -181,10 +186,14 @@ fun FilterDialog(
                         } else {
                             onDismissDialog()
                         }
-                    }
+                    },
+                    modifier = Modifier.semantics { contentDescription = weekContentDesc }
+
                 ) {
                     Text(text = stringResource(id = R.string.week))
                 }
+
+                val alphabetContentDesc = stringResource(id = R.string.alphabet)
                 Tab(
                     selected = selectedTab == 1,
                     onClick = {
@@ -196,7 +205,8 @@ fun FilterDialog(
                         } else {
                             onDismissDialog()
                         }
-                    }
+                    },
+                    modifier = Modifier.semantics { contentDescription = alphabetContentDesc }
                 ) {
                     Text(text = stringResource(id = R.string.alphabet))
                 }
@@ -226,13 +236,15 @@ fun TopBar(
                 .background(MaterialTheme.colors.background)
                 .padding(end = 10.dp)
         ) {
+            val contentDescOrder = stringResource(id = R.string.order_type)
             IconButton(
                 onClick = {
                     onOrderClicked(
                         !filterBooksState.isAscending,
                         filterBooksState.bookFilter
                     )
-                }
+                },
+                modifier = Modifier.semantics { contentDescription = contentDescOrder }
             ) {
                 Icon(
                     painter = if (filterBooksState.isAscending) painterResource(id = R.drawable.ic_arrow_up) else painterResource(id = R.drawable.ic_arrow_down),
@@ -243,8 +255,10 @@ fun TopBar(
 
             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
+            val contentDescFilter = stringResource(id = R.string.filter)
             IconButton(
-                onClick = onFilterIconClicked
+                onClick = onFilterIconClicked,
+                modifier = Modifier.semantics { contentDescription = contentDescFilter }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_filter),
